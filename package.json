@@ -1,0 +1,80 @@
+{
+  "name": "dsh-dafeiyu-home",
+  "version": "2.0.2",
+  "description": "把 QQ 接进 DeepSeek Harness 的插件：人设陪聊、记忆、心情、主动推送与可视化面板。",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "qq",
+    "onebot",
+    "napcat",
+    "persona",
+    "chatbot"
+  ],
+  "license": "MIT",
+  "author": "xingzhu",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./client": "./client.js"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "lib",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md",
+    "SECURITY.md",
+    "LICENSE",
+    "docs/acceptance.md",
+    "docs/api-contract.md",
+    "docs/install-guide.md",
+    "docs/napcat-faq.md",
+    "docs/publish-checklist.md"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-sidebar"
+      ]
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "homepage": "https://github.com/conceal27/dsh-dafeiyu-QQhome",
+  "scripts": {
+    "check": "node scripts/check.mjs",
+    "test": "node --test tests/pure-logic.test.mjs tests/napcat.test.mjs && node tests/client-smoke.mjs",
+    "prepublishOnly": "node scripts/scan-secrets.mjs && node scripts/check.mjs"
+  },
+  "dependencies": {
+    "qrcode": "^1.5.4",
+    "sherpa-onnx-node": "^1.13.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/conceal27/dsh-dafeiyu-QQhome.git"
+  },
+  "bugs": {
+    "url": "https://github.com/conceal27/dsh-dafeiyu-QQhome/issues"
+  }
+}

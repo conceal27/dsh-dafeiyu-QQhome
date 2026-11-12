@@ -1,0 +1,6 @@
+# dsh-dafeiyu-home — bundle 补丁：把一个 host 行插进组合树
+# 本包自带这一层声明，所以 `dsh plugin --profile <name> add <本包>` 之后，
+# profile 只要在 dsh.profile.bundles 里列上本包名即可生效。
+- insert:
+    - id: dafeiyu
+      name: dsh-dafeiyu-home
