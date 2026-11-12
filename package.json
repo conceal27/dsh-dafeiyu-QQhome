@@ -37,7 +37,9 @@
     "docs/api-contract.md",
     "docs/install-guide.md",
     "docs/napcat-faq.md",
-    "docs/publish-checklist.md"
+    "docs/publish-checklist.md",
+    "scripts",
+    "tests"
   ],
   "engines": {
     "node": ">=22"
