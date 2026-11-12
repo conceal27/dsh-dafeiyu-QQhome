@@ -1,4 +1,4 @@
-<!-- 归属：xingzhu · 适用版本：0.1.x -->
+<!-- 归属：xingzhu · 适用版本：2.0.x -->
 # 大肥鱼插件
 
 
@@ -43,7 +43,7 @@ DSH 插件页           面板「概览」→ 连接 QQ          面板「人设
 
 插件包名：**`dsh-dafeiyu-home`**。任选一种方式。
 
-> 目前主要走 **GitHub 仓库 / Release tarball** 安装；npm 上的同名包不一定与这里的代码同源，装之前先核对版本与提交。
+> 主要装法：**GitHub 仓库地址 / Release tarball**。npm 上的同名包不一定与这里的代码同源，装之前先核对版本与提交。
 > ⚠️ DSH 有 pnpm 供应链观察期（`minimumReleaseAge`）：新版本发布后短时间内只填包名可能装到旧版，建议在「添加插件」里**指定版本**（先卸载旧版）。
 > 国内网络慢时可在安装源里选「中国大陆镜像源」（只加速 npm 包，不加速 NapCat 下载）。
 
@@ -52,10 +52,11 @@ DSH 插件页           面板「概览」→ 连接 QQ          面板「人设
 1. 打开 DSH，左侧栏点「插件」（有的版本在 设置 → 插件）；
 2. 点右上角 **添加插件**；
 3. 在输入框里填下面任意一种，点安装：
-   - npm 包名：`dsh-dafeiyu-home`
-   - 本地绝对路径：例如 `~/dsh-dafeiyu-home`（开发/离线用，换成你本机实际目录）
-   - Git 地址：`https://github.com/conceal27/dsh-dafeiyu-QQhome`（发布后有效）
-   - tarball：本地 `.tgz` 路径，或 `https://.../dsh-dafeiyu-home-0.1.0.tgz`
+   - **Git 地址（推荐）**：`https://github.com/conceal27/dsh-dafeiyu-QQhome`
+   - **Release tarball**：
+     `https://github.com/conceal27/dsh-dafeiyu-QQhome/releases/download/v2.0.2/dsh-dafeiyu-home-2.0.2.tgz`
+   - 本地 `.tgz` 路径，或本地目录：例如 `~/dsh-dafeiyu-home`（开发/离线用，换成你本机实际目录）
+   - npm 包名：`dsh-dafeiyu-home` ⚠️ npm 上的同名包与本仓库**不同源**，只有确认过版本和提交才用这条
 4. 安装完成页会显示实际版本，点 **立即启用**；
 5. 浏览器按 **Ctrl + Shift + R** 强刷一次页面。
 
@@ -69,9 +70,14 @@ DSH 插件页           面板「概览」→ 连接 QQ          面板「人设
 
 ### 方式二：命令行（适合开发/脚本）
 
-```powershell
+```bash
 # 先确认 profile 名字：桌面版通常是 desktop，浏览器版是 web
-dsh plugin --profile <profile> add dsh-dafeiyu-home
+# 从 GitHub 装（推荐）
+dsh plugin --profile <profile> add https://github.com/conceal27/dsh-dafeiyu-QQhome
+
+# 从 Release tarball 装
+dsh plugin --profile <profile> add \
+  https://github.com/conceal27/dsh-dafeiyu-QQhome/releases/download/v2.0.2/dsh-dafeiyu-home-2.0.2.tgz
 
 # 本地目录（开发时）
 dsh plugin --profile <profile> add ~/dsh-dafeiyu-home
@@ -84,17 +90,18 @@ dsh plugin --profile <profile> remove dsh-dafeiyu-home
 
 ### 方式三：tarball / 离线包
 
-```powershell
-npm pack dsh-dafeiyu-home     # 或本仓库自带：node scripts/pack.mjs（产物在 dist\）
+```bash
+# 在仓库目录里打包
+npm pack                      # 产物：dsh-dafeiyu-home-<版本>.tgz
 # 然后在插件页「添加插件」里填这个 .tgz 的绝对路径，或：
-dsh plugin --profile <profile> add .\dsh-dafeiyu-home-0.1.3.tgz
+dsh plugin --profile <profile> add ./dsh-dafeiyu-home-2.0.2.tgz
 ```
 
 适合内网机器：把 `.tgz` 拷过去安装；托管安装 NapCat 仍要能访问 GitHub 或用镜像。
 
 ### 装完怎么确认
 
-左侧栏有「大肥鱼插件」入口、面板能打开并能看到版本号；DSH 日志里有 `[qq-fish] 已挂载 v0.1.3，家目录 ...`。
+左侧栏有「大肥鱼插件」入口、面板能打开并能看到版本号；DSH 日志里有 `[qq-fish] 已挂载 v2.0.2` 与 `桥接已初始化`。
 
 ### 卸载
 
@@ -343,19 +350,18 @@ NapCat 是社区协议端（非官方、有封号风险，建议小号），还�
 
 ## 开发
 
-```powershell
+```bash
 cd dsh-dafeiyu-home
 
-npm run check                    # node --check：index/client/bridge/napcat/webui
-npm test                         # 纯逻辑 55 例 + 面板冒烟 62 断言 + NapCat/WebUI 23 例
-# 集成测试要读宿主里真实的 dsh-llm：用 DSH 自带 Electron 以 Node 模式跑
-$env:ELECTRON_RUN_AS_NODE=1
-& "<DSH 安装目录>\DeepSeek Harness.exe" tests\integration-engine.mjs
-& "<DSH 安装目录>\DeepSeek Harness.exe" tests\integration-bridge.mjs
-& "<DSH 安装目录>\DeepSeek Harness.exe" tests\integration-reconnect.mjs   # 断线→自动重连→继续收发
+node scripts/check.mjs   # 118 个文件 node --check + files 白名单 + 纯逻辑模块真 import + cordis 一致性
+npm test                 # 纯逻辑 13 断言 + NapCat 安装器 8 断言 + 面板冒烟 7 组
+node scripts/scan-secrets.mjs   # 提交前必须跑：敏感信息扫描（QQ 号/本机路径/内网 IP/token/cookie）
 ```
 
-没有 npm 时也可以直接 `node tests/pure-logic.test.mjs`／`node scripts/pack.mjs`。
+三个测试文件也能单独跑：`node --test tests/pure-logic.test.mjs`、
+`node --test tests/napcat.test.mjs`、`node tests/client-smoke.mjs`。
+
+`prepublishOnly` 会自动串起 `scan-secrets` 与 `check`，所以 `npm publish`（或 `npm pack` 前的钩子）不会漏检。
 
 结构：
 
@@ -379,6 +385,13 @@ $env:ELECTRON_RUN_AS_NODE=1
 侧栏/面板头像基于用户提供的角色参考图裁切制作（归属 xingzhu），随包内嵌在 icon.svg 与 client.js（data URI），不依赖外部文件。
 
 ## 更新日志
+
+### 2.0.2（2026-11-12）· 首个公开版本
+
+- **首次公开**：代码托管到 <https://github.com/conceal27/dsh-dafeiyu-QQhome>，同步发 Release tarball。
+- **脱敏**：移除本机绝对路径、内网 IP、QQ 号、B 站昵称等个人信息；身份类配置（`selfQq` / `selfBiliName` / `ownerBiliName`）默认留空，由使用者在面板里填。
+- **修状态文件落点**：`intent` / `curiosity` / `reinterpret` / `body` / `life` / `social` / `bilishare` 等模块原来把状态目录写死成某个固定家目录，现在统一走 `DSH_HOME`。此前在非该用户环境里这些模块读写的是空目录。
+- **补齐工程脚手架**：新增 `scripts/scan-secrets.mjs`（敏感信息扫描）、`scripts/check.mjs`（语法 + 白名单 + 模块导入 + cordis 一致性）与 `tests/`（纯逻辑、NapCat 安装器、面板冒烟）。此前 `package.json` 里 `test` / `check` / `prepublishOnly` 引用的目录并不存在。
 
 ### 0.1.3（2026-10-26）
 

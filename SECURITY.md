@@ -173,8 +173,7 @@ QQ 桥（NapCat，走 OneBot 11 协议）接到 DSH 面板上，用你自己的�
 ## 10. 漏洞报告
 
 - 请**不要**在公开 issue 里贴 token、聊天记录、真实 QQ 号或截图；
-- 通过项目仓库的 Issues 提交（发布后补充仓库地址；本文件随包发布，若还没有仓库，
-  先联系插件作者 xingzhu）；
+- 通过项目仓库的 Issues 提交：<https://github.com/conceal27/dsh-dafeiyu-QQhome/issues>；
 - 报告请包含：版本号、复现步骤、受影响文件/接口、是否已在最新版复现；
 - 收到后先确认、再修复并发布新版本；必要时把受影响版本在 npm 上标记为 deprecated。
 
