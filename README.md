@@ -238,6 +238,25 @@ dsh plugin --profile <profile> add ./dsh-dafeiyu-home-2.0.2.tgz
 
 左侧栏有「大肥鱼插件」入口、面板能打开并能看到版本号；DSH 日志里有 `[qq-fish] 已挂载 v2.0.2` 与 `桥接已初始化`。
 
+### 升级到新版本
+
+先卸载再装，别原地覆盖（DSH 的 pnpm 有供应链观察期，直接 `add` 同一个包名可能还是旧版）：
+
+```bash
+# 1. 先卸载旧版（状态目录不动，聊天记录/记忆都还在）
+dsh plugin --profile web remove dsh-dafeiyu-home
+# 2. 再装新版
+dsh plugin --profile web add https://github.com/conceal27/dsh-dafeiyu-QQhome
+# 3. 重启让后端生效（改的是 lib/*.mjs，ESM 已加载进内存，不重启不生效）
+sudo systemctl restart dsh-web      # Linux
+# Windows 桌面版：面板里点重启，或退出 DSH 再打开
+```
+
+浏览器面板改了要 **Ctrl + Shift + R** 强刷。
+
+状态目录 `$DSH_HOME/qq-fish/` 在升级过程中不会被删，所以记忆、聊天记录、表情包都保留。
+如果你就是想彻底重来，才去删它（见下面「卸载」）。
+
 ### 卸载
 
 1. 面板 →「推送与安全」→ **紧急停止**；
@@ -520,6 +539,12 @@ node scripts/scan-secrets.mjs   # 提交前必须跑：敏感信息扫描（QQ �
 侧栏/面板头像基于用户提供的角色参考图裁切制作（归属 xingzhu），随包内嵌在 icon.svg 与 client.js（data URI），不依赖外部文件。
 
 ## 更新日志
+
+### 未发布（在 main 上）
+
+- **`files` 白名单补 `scripts/` 与 `tests/`**：之前这两个目录虽然在仓库里，但 `npm pack` 不会带进 tarball，使用者解包后跑 `npm test` 会直接 `MODULE_NOT_FOUND`。
+- **README 补「功能说明」章节**：按「她在干什么」分十个主题，逐条对应代码里的真实模块。
+- **更新方式说明**：见上面「安装」里的卸载重装 / 指定版本。
 
 ### 2.0.2（2026-11-12）· 首个公开版本
 
