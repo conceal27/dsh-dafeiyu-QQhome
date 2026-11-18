@@ -1,0 +1,26 @@
+# 依赖
+node_modules/
+
+# 备份文件（都是本机编辑时的 .bak-* 快照，不该进仓库）
+*.bak
+*.bak-*
+*.bak.*
+
+# 运行时数据（插件在 $DSH_HOME/qq-fish 里，绝不会出现在这里，但防止误拷）
+*.log
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+.env
+.env.*
+dsh.env
+
+# 系统垃圾
+.DS_Store
+Thumbs.db
+
+# 编辑时的临时快照 / 备份副本
+*.snapshot-*
+*.snapshot
+*.orig
+*.rej
